@@ -47,6 +47,7 @@ import com.xiyoukeji.xiju.service.UserMsgService;
 import com.xiyoukeji.xiju.service.UserService;
 import com.xiyoukeji.xiju.service.VoucherCodeService;
 import com.xiyoukeji.xiju.service.VoucherService;
+import com.xiyoukeji.xiju.service.WithdrawMoneyService;
 import com.xiyoukeji.xiju.service.WithdrawalProportionService;
 import com.xiyoukeji.xiju.service.UrlInfoService;
 import com.xiyoukeji.xiju.service.PowerInfoService;
@@ -65,6 +66,8 @@ public class BaseController {
 	@Autowired
 	PromotionCodeService promotionCodeService;
 	
+	@Autowired 
+	WithdrawMoneyService withdrawMoneyService;
 	
 	@Autowired 
 	StylistService stylistService;

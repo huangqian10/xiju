@@ -26,6 +26,8 @@ public class Receipt {
 	@Column(name="user_id",length=11)
 	private Integer userId;
 	
+	
+	
 	@Column(name="pay_method",length=63)
 	private String payMethod;
 	
@@ -68,6 +70,17 @@ public class Receipt {
 	@Column(name="memo",length=255)
 	private String memo;
 	
+	@Column(name="is_withdraw_money",length=4,nullable=false,columnDefinition="INT default 0")
+	private Integer isWithdrawMoney;
+	
+	public Integer getIsWithdrawMoney() {
+		return isWithdrawMoney;
+	}
+
+	public void setIsWithdrawMoney(Integer isWithdrawMoney) {
+		this.isWithdrawMoney = isWithdrawMoney;
+	}
+
 	/**
 	 * 是否已收货
 	 */

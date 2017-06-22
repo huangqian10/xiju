@@ -3,8 +3,6 @@
  */
 package com.xiyoukeji.xiju.model;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,30 +16,14 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Table(name="withdraw_money")
-public class WithdrawMoney {
+@Table(name="bank_card")
+public class BankCard {
+	
 	@Id
 	@GeneratedValue(generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")
 	@Column(name = "id", length = 11)
 	private Integer id;
-	
-	
-	@Column(name="user_id" ,length = 11)
-	private Integer userId;  //用户id
-	
-	@Column(name="receipt_id",length=11)
-	private Integer receiptId;    //订单id
-	
-	@Column(name="withdraw_status" ,length = 2)
-	private Integer withdrawStatus;  //状态
-	
-	@Column(name="total_money" ,length = 20)
-	private BigDecimal totalMoney;  //提现金额
-	
-	@Column(name="withdraw_time" ,length = 20)
-	private Long withdrawTime;  //提现的时间
-	
 	
 	@Column(name="owner" ,length = 255)
 	private String owner;  //提卡人
@@ -57,6 +39,13 @@ public class WithdrawMoney {
 	@Column(name="cellphone" ,length = 255)
 	private String cellphone;  //手机号
 	
-	@Column(name="ctime",length=20)        
-	private Long ctime=System.currentTimeMillis();     //记录生成的时间
+	@Column(name="isDefault" ,length = 4)
+	private Integer is_default;  //手机号
+	
+	@Column(name="ctime",length=20)
+	private long ctime=System.currentTimeMillis();
+	
+	
+	
+
 }
