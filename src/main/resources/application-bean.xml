@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task-4.0.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd">
+	<context:annotation-config />
+	<import resource="application-db.xml" />
+	<context:component-scan base-package="com.xiyoukeji.xiju.service" />
+	<context:property-placeholder location="classpath:redis.properties"
+		ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath:application-bean.properties"
+		ignore-unresolvable="true" />
+	<!-- pool配置 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="300" />
+		<property name="maxIdle" value="50" />
+		<property name="minIdle" value="1" />
+		<property name="maxWaitMillis" value="3000" />
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<!-- jedis pool配置 -->
+	<!-- redis的连接池pool，不是必选项：timeout/password -->
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${redis.host}" />
+		<constructor-arg index="2" value="${redis.port}" type="int" />
+		<constructor-arg index="3" value="300000" type="int" />
+	</bean>
+
+	<bean id="redisCache" class="com.xiyoukeji.xiju.service.RedisCache">
+		<property name="jedisPool" ref="jedisPool"></property>
+	</bean>
+
+	<bean id="fileService" class="com.xiyoukeji.xiju.service.FileService">
+		<property name="filePath" value="${filePath}"></property>
+		<property name="baseUrl" value="${baseUrl}"></property>
+	</bean>
+	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	        <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
+	</bean>
+</beans>
