@@ -28,5 +28,13 @@ public class WithdrawalProportionController extends BaseController{
 		Utils.writeBack(request, response, jv);
 		
 	}
+	
+	@RequestMapping("/withdrawalProportion/getProportion.do")
+	public void setProportion(	HttpServletRequest request,
+			HttpServletResponse response){
+		JSONObject jv = new JSONObject();
+		jv.put("info", withdrawalProportionService.getProportion());
+		Utils.writeBack(request, response, jv);
+	}
 		
 }

@@ -1,5 +1,7 @@
 package com.xiyoukeji.xiju.core.dao;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,7 +20,8 @@ import org.slf4j.LoggerFactory;
 public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements BaseHibernateDao<T, PK>{
 
 	// 日志输出类
-
+	private Class<T> entityClass;
+		
 	protected static final Logger LOGGER = LoggerFactory.getLogger(BaseHibernateDaoImpl.class);
 
 	private SessionFactory sessionFactory;
@@ -27,6 +30,16 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 		this.sessionFactory = sessionFactory;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public BaseHibernateDaoImpl() {
+		this.entityClass = null;
+		Class c = getClass();
+		Type t = c.getGenericSuperclass();
+		if (t instanceof ParameterizedType) {
+			Type[] p = ((ParameterizedType) t).getActualTypeArguments();
+			this.entityClass = (Class<T>) p[0];
+		}
+	}
 	public Session getSession() {
 
 		// 事务必须是开启的(Required)，否则获取不到
@@ -142,9 +155,9 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 * 获取PO总数(默认为entityClass)
 	 */
 
-	public int countAll() {
+	public int countAll(Class<T> entity) {
 
-		Criteria criteria = createCriteria();
+		Criteria criteria = createCriteria(entity);
 
 		return Integer.valueOf(criteria.setProjection(Projections.rowCount())
 
@@ -190,9 +203,9 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 */
 
 	@SuppressWarnings("unchecked")
-	public List<T> list() {
+	public List<T> list(Class<T> entity) {
 
-		return createCriteria().list();
+		return createCriteria(entity).list();
 
 	}
 
@@ -238,9 +251,9 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 */
 
 	@SuppressWarnings("unchecked")
-	public List<T> list(String orderBy, boolean isAsc) {
+	public List<T> list(Class<T> clazz,String orderBy, boolean isAsc) {
 
-		Criteria criteria = createCriteria();
+		Criteria criteria = createCriteria(clazz);
 
 		if (isAsc) {
 
@@ -273,13 +286,13 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 * @return
 	 */
 
-	public List<T> list(String propertyName, Object value) {
+	public List<T> list(Class<T>  clazz,String propertyName, Object value) {
 
 		Criterion criterion = Restrictions
 
 		.like(propertyName, "%" + value + "%");
 
-		return list(criterion);
+		return list(clazz,criterion);
 
 	}
 
@@ -289,9 +302,9 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 */
 
 	@SuppressWarnings("unchecked")
-	private List<T> list(Criterion criterion) {
+	private List<T> list(Class<T>  clazz,Criterion criterion) {
 
-		Criteria criteria = createCriteria();
+		Criteria criteria = createCriteria(clazz);
 
 		criteria.add(criterion);
 
@@ -317,9 +330,9 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 */
 
 	@SuppressWarnings("unchecked")
-	public List<T> list(Criterion... criterions) {
+	public List<T> list(Class<T>  clazz,Criterion... criterions) {
 
-		return createCriteria(criterions).list();
+		return createCriteria(clazz,criterions).list();
 
 	}
 
@@ -341,11 +354,11 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 */
 
 	@SuppressWarnings("unchecked")
-	public T uniqueResult(String propertyName, Object value) {
+	public T uniqueResult(Class<T>  clazz,String propertyName, Object value) {
 
 		Criterion criterion = Restrictions.eq(propertyName, value);
 
-		return (T) createCriteria(criterion).uniqueResult();
+		return (T) createCriteria(clazz,criterion).uniqueResult();
 
 	}
 
@@ -366,9 +379,9 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 * @return
 	 */
 
-	public T uniqueResult(Criterion... criterions) {
+	public T uniqueResult(Class<T>  clazz,Criterion... criterions) {
 
-		Criteria criteria = createCriteria(criterions);
+		Criteria criteria = createCriteria(clazz,criterions);
 
 		return uniqueResult(criteria);
 
@@ -461,9 +474,9 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 	 * @param criterions数量可变的Criterion
 	 */
 
-	public Criteria createCriteria(Criterion... criterions) {
+	public Criteria createCriteria(Class<T> entity,	   Criterion... criterions) {
 
-		Criteria criteria = createCriteria();
+		Criteria criteria = getSession().createCriteria(entity);
 
 		for (Criterion c : criterions) {
 
@@ -501,6 +514,10 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 		return list(criteria);
 
 	}
+
+
+
+
 
 
 }

@@ -71,7 +71,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * 获取PO总数(默认为entityClass)
 	 */
 
-	public int countAll();
+	public int countAll(Class<T> entity);
 
 	/*
 	 * 
@@ -92,7 +92,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * 获取全部对象
 	 */
 
-	public List<T> list();
+	public List<T> list(Class<T> entity);
 
 	/*
 	 * 
@@ -125,7 +125,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * @return
 	 */
 
-	public List<T> list(String orderBy, boolean isAsc);
+	public List<T> list(Class<T>  clazz,String orderBy, boolean isAsc);
 
 	/*
 	 * 
@@ -144,7 +144,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * @return
 	 */
 
-	public List<T> list(String propertyName, Object value);
+	public List<T> list(Class<T>  clazz,String propertyName, Object value);
 
 	/*
 	 * 
@@ -163,7 +163,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * @return
 	 */
 
-	public List<T> list(Criterion... criterions);
+	public List<T> list(Class<T>  clazz,Criterion... criterions);
 
 	/*
 	 * 
@@ -182,7 +182,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * @return
 	 */
 
-	public T uniqueResult(String propertyName, Object value);
+	public T uniqueResult(Class<T>  clazz,String propertyName, Object value);
 
 	/*
 	 * 
@@ -201,7 +201,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * @return
 	 */
 
-	public T uniqueResult(Criterion... criterions);
+	public T uniqueResult(Class<T>  clazz,Criterion... criterions);
 
 	/*
 	 * 
@@ -265,7 +265,7 @@ public interface BaseHibernateDao<T, PK extends java.io.Serializable> {
 	 * @param criterions数量可变的Criterion
 	 */
 
-	public Criteria createCriteria(Criterion... criterions);
+	public Criteria createCriteria(Class<T> clazz,Criterion... criterions);
 
 	/*
 	 * 
