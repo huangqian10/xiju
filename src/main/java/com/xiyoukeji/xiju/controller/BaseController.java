@@ -16,6 +16,7 @@ import com.xiyoukeji.xiju.core.enums.Const;
 import com.xiyoukeji.xiju.domain.PayMsg;
 import com.xiyoukeji.xiju.service.ActivityService;
 import com.xiyoukeji.xiju.service.AdminUserService;
+import com.xiyoukeji.xiju.service.BankCardService;
 import com.xiyoukeji.xiju.service.CartService;
 import com.xiyoukeji.xiju.service.ChuanyiActivityService;
 import com.xiyoukeji.xiju.service.ClientInfoService;
@@ -56,6 +57,9 @@ import com.xiyoukeji.xiju.service.PromotionCodeService;
 public class BaseController {
 
 	static Logger logger = Logger.getLogger(BaseController.class);
+	
+	@Autowired
+	BankCardService bankCardService;
 	
 	@Autowired
 	WithdrawalProportionService withdrawalProportionService;
