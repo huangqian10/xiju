@@ -30,4 +30,11 @@ public class FeedBackController extends BaseController{
 		jv.put("code", Const.SUCCESS);
 		Utils.writeBack(request, response, jv);
 	}
+	  @RequestMapping({"/admin/getFeedBack.do"})
+	  public void getFeedBack(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="pageSize", required=true) Integer pageSize, @RequestParam(value="pageNo", required=true) Integer pageNo)
+	  {
+	    JSONObject jv = new JSONObject();
+	    jv.put("info", this.feedBackService.getAll(pageSize, pageNo));
+	    Utils.writeBack(request, response, jv);
+	  }
 }

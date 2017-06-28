@@ -25,6 +25,18 @@ public class BankCard {
 	@Column(name = "id", length = 11)
 	private Integer id;
 	
+	
+	@Column(name="user_id" ,length = 11)
+	private Integer userId;  //用户id
+	
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	@Column(name="owner" ,length = 255)
 	private String owner;  //提卡人
 	
@@ -33,14 +45,14 @@ public class BankCard {
 	private String openNumber;  //开户号
 	
 	@Column(name="open_bank" ,length = 255)
-	private String openBank;  //开户号
+	private String openBank;  //开户银行
 	
 	
 	@Column(name="cellphone" ,length = 255)
 	private String cellphone;  //手机号
 	
-	@Column(name="isDefault" ,length = 4)
-	private Integer is_default;  //是否默认
+	@Column(name="is_default" ,length = 4,nullable=false,columnDefinition="INT default 0")
+	private int isDefault;  //是否默认
 	
 	@Column(name="ctime",length=20)
 	private long ctime=System.currentTimeMillis();
@@ -85,12 +97,14 @@ public class BankCard {
 		this.cellphone = cellphone;
 	}
 
-	public Integer getIs_default() {
-		return is_default;
+
+
+	public int getIsDefault() {
+		return isDefault;
 	}
 
-	public void setIs_default(Integer is_default) {
-		this.is_default = is_default;
+	public void setIsDefault(int isDefault) {
+		this.isDefault = isDefault;
 	}
 
 	public long getCtime() {

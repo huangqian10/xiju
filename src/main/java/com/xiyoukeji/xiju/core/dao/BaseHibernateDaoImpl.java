@@ -290,7 +290,7 @@ public class BaseHibernateDaoImpl<T, PK extends java.io.Serializable> implements
 
 		Criterion criterion = Restrictions
 
-		.like(propertyName, "%" + value + "%");
+		.eq(propertyName, value);
 
 		return list(clazz,criterion);
 

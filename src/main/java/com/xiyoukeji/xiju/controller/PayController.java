@@ -26,6 +26,7 @@ import com.xiyoukeji.xiju.domain.PayMsg;
 import com.xiyoukeji.xiju.domain.PingppSuccess;
 import com.xiyoukeji.xiju.model.Goods;
 import com.xiyoukeji.xiju.model.GoodsColorStyle;
+import com.xiyoukeji.xiju.model.PromotionCode;
 import com.xiyoukeji.xiju.model.Receipt;
 import com.xiyoukeji.xiju.model.ReceiptAddress;
 import com.xiyoukeji.xiju.model.Voucher;
@@ -45,6 +46,7 @@ public class PayController extends BaseController {
 			@RequestParam(value = "voucherId", required = false) Integer voucherId,
 			@RequestParam(value = "payMethod", required = true) String payMethod,
 			@RequestParam(value = "receiptAddressId", required = true) Integer receiptAddressId,
+			@RequestParam(value="promotionCode",required=false)String promotionCode,
 			@RequestParam(value = "fapiao", required = false) String fapiao,
 			@RequestParam(value = "memo", required = false) String memo,
 			@RequestParam(value = "cartIds", required = false) String cartIds)
@@ -56,6 +58,13 @@ public class PayController extends BaseController {
 		Receipt r = new Receipt();
 		int code = validate(payMsgList, voucherId, r, payMsg, payMethod,
 				userId, receiptAddressId, false);
+		//优惠码		
+		if(code==Const.SUCCESS&&promotionCode!=null&&!"".equals(promotionCode)){
+			PromotionCode  promotion=promotionCodeService.usecPromotionCode(promotionCode);
+		if(promotion!=null){
+		r.setPromotionCode(promotion);
+		}
+		}
 		if (code == Const.SUCCESS) {
 			r.setFapiao(fapiao);
 			r.setMemo(memo);

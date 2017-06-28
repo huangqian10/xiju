@@ -48,6 +48,8 @@ public class AdminFilter implements Filter {
 		} else {
 			System.out.println("===========" + request.getRequestURI());
 			System.out.println("==========" + user.getUserName());
+			System.err.println(powerInfoService.isAuthUrl(request.getRequestURI(),
+					user.getPowerId()));
 			if (user.getStatus().equals(AdminUser.USEFUL_STATUS)
 					&& powerInfoService.isAuthUrl(request.getRequestURI(),
 							user.getPowerId())) {

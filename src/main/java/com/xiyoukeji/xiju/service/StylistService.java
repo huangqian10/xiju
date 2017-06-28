@@ -3,8 +3,14 @@
  */
 package com.xiyoukeji.xiju.service;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +18,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.xiyoukeji.xiju.core.dao.BaseHibernateDao;
+import com.xiyoukeji.xiju.core.enums.ReceiptStatus;
 import com.xiyoukeji.xiju.model.PowerInfo;
+import com.xiyoukeji.xiju.model.Receipt;
 import com.xiyoukeji.xiju.model.Stylist;
 import com.xiyoukeji.xiju.model.UrlInfo;
 
@@ -28,6 +39,8 @@ public class StylistService {
 	@Qualifier("hibernateDao")
 	BaseHibernateDao<Stylist, Integer> dao;
 	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Transactional
 	public void authentication(Integer userId,String stylistCardUrl,String stylistCertificateUrl,String businessLicenseUrl){
@@ -57,6 +70,48 @@ public class StylistService {
 		
 		return (Stylist)dao.list(dc).get(0);
 	}
+	
+	
+	@Transactional
+	public Map<String, Object> getStylistInfoByUserId(Integer userId){
+		Map<String, Object> map=new HashMap<String, Object>();
+		Session session = this.sessionFactory.getCurrentSession();
+	
+		String queryString="from Receipt as r where r.PromotionCode.userId="+userId;
+		List<Receipt> list=session.createQuery(queryString).list();
+
+		int totalMoney=0;
+		int withdrawMoney=0;
+		for(Receipt r:list){
+
+			JSONObject jsonObject=JSONObject.parseObject(r.getPayJson());
+			JSONArray jsonArray=jsonObject.getJSONArray("payMsg");
+			if(r.getStatus()==ReceiptStatus.NOTPAY.value()){
+				withdrawMoney+=	getPrice(jsonArray);
+				totalMoney+=getPrice(jsonArray);
+			}else if(r.getStatus()==ReceiptStatus.PAID.value()){
+				totalMoney+=getPrice(jsonArray);
+			}
+			     
+		}
+		map.put("totalMoney", totalMoney);
+		map.put("withdrawMoney", withdrawMoney);
+		map.put("Stylist", getStylistByUserId(userId));
+
+		return map;
+	}
+	
+	
+	public int getPrice(JSONArray jsonArray){
+		Iterator<?> it=jsonArray.iterator();
+		int money=0;
+		while(it.hasNext()){
+			money +=		JSONObject.parseObject(it.next()+"").getInteger("price");
+		}
+	
+		return money;
+	}
+	
 	
 	@Transactional
 	public void changeStylistStatus(Integer userId,Integer status){

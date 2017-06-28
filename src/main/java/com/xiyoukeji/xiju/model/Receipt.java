@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -70,6 +72,13 @@ public class Receipt {
 	@Column(name="memo",length=255)
 	private String memo;
 	
+
+	
+	@OneToOne
+	private PromotionCode PromotionCode;
+	
+
+
 	@Column(name="is_withdraw_money",length=4,nullable=false,columnDefinition="INT default 0")
 	private Integer isWithdrawMoney;
 	
@@ -211,6 +220,10 @@ public class Receipt {
 	}
 
 
+	public void setPromotionCode(PromotionCode promotionCode) {
+		PromotionCode = promotionCode;
+	}
+
 	public Integer getCreateTime() {
 		return createTime;
 	}
@@ -266,6 +279,17 @@ public class Receipt {
 
 	public void setIsReceipt(Integer isReceipt) {
 		this.isReceipt = isReceipt;
+	}
+
+	@Override
+	public String toString() {
+		return "Receipt [id=" + id + ", userId=" + userId + ", payMethod=" + payMethod + ", amount=" + amount
+				+ ", netAmount=" + netAmount + ", status=" + status + ", createTime=" + createTime + ", payTime="
+				+ payTime + ", voucherId=" + voucherId + ", payJson=" + payJson + ", address=" + address + ", mobile="
+				+ mobile + ", name=" + name + ", receiptAddressId=" + receiptAddressId + ", fapiao=" + fapiao
+				+ ", memo=" + memo + ", PromotionCode=" + PromotionCode + ", isWithdrawMoney=" + isWithdrawMoney
+				+ ", isReceipt=" + isReceipt + ", isComment=" + isComment + ", showStatus=" + showStatus
+				+ ", expressNo=" + expressNo + "]";
 	}
 	
 	

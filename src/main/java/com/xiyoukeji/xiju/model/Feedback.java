@@ -9,28 +9,39 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="feedback")
+@Table(name = "feedback")
 public class Feedback {
-	
-	public static final int READED=1;
-	public static final int NOTREAD=0;
+
+	public static final int READED = 1;
+	public static final int NOTREAD = 0;
 	@Id
 	@GeneratedValue(generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")
 	@Column(name = "id", length = 11)
 	private Integer id;
-	
-	@Column(name="content",length=255)
+
+	@Column(name = "content", length = 255)
 	private String content;
-	
-	@Column(name="create_time",length=11)
+
+	@Column(name = "create_time", length = 11)
 	private Integer createTime;
-	
-	@Column(name="status",length=11)
+
+	@Column(name = "status", length = 11)
 	private Integer status;
 
-	@Column(name="user_id",length=11)
+	@Column(name = "user_id", length = 11)
 	private Integer userId;
+
+	private String username;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -38,8 +49,6 @@ public class Feedback {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	
 
 	public String getContent() {
 		return content;

@@ -37,7 +37,7 @@ public class PowerInfoService extends BaseService{
 		UrlInfo urlInfo =urlInfoService.getUrlInfoByUri(uri);
 
 		PowerInfo powerInfo =dao.get(powerId, PowerInfo.class);
-
+		
 		if(urlInfo!=null&&powerInfo!=null){
 			System.out.println(urlInfo.getId());
 			System.out.println(powerInfo.getUrlInfoIds());

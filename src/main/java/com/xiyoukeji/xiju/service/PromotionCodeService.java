@@ -74,23 +74,38 @@ public class PromotionCodeService {
 	
 	
 		@Transactional
-		public Integer usecPromotionCode(String  promotionCode){
+		public PromotionCode usecPromotionCode(String  promotionCode){
 			long time=System.currentTimeMillis();
 			DetachedCriteria dc=DetachedCriteria.forClass(PromotionCode.class);
 			dc.add(Restrictions.eq("promotionCode", promotionCode))
 			.add(Restrictions.gt("endTime", time))
 			.add(Restrictions.eq("status", PromotionCodeEnum.UNUSED.value()));
 			if(dao.list(dc).isEmpty()){
-			return	 Const.INVALID_CODE;
+			return	 null;
 			}else{
 				PromotionCode  promotion=(PromotionCode)	dao.list(dc).get(0);	
 						promotion.setStatus(2);;
 						dao.update(promotion);
-						return Const.SUCCESS;
+						return promotion;
 			}
-			
+	
 	}
 		
+	
+		
+		
+		public	Integer valiPromotionCode(String  promotionCode){
+			long time=System.currentTimeMillis();
+			DetachedCriteria dc=DetachedCriteria.forClass(PromotionCode.class);
+			dc.add(Restrictions.eq("promotionCode", promotionCode))
+			.add(Restrictions.gt("endTime", time))
+			.add(Restrictions.eq("status", PromotionCodeEnum.UNUSED.value()));
+			if(dao.list(dc).isEmpty()){
+				return	 Const.INVALID_CODE;
+				}else{
+					return Const.SUCCESS;
+				}
+		}
 		
 		@Transactional
 		public List<PromotionCode> getPromotionCodeRecord(Integer userId){

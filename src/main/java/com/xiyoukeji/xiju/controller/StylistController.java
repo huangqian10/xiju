@@ -50,6 +50,17 @@ public class StylistController extends BaseController{
 		Utils.writeBack(request, response, jv);
 	}
 	
+	@RequestMapping("/stylist/getStylistInfoByUserId.do")
+	public void getStylistInfoByUserId(HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value="userId",required=true)Integer userId){
+		
+		JSONObject jv = new JSONObject();
+		jv.put("info",stylistService.getStylistInfoByUserId(userId));
+		Utils.writeBack(request, response, jv);
+	}
+	
+	
 	@RequestMapping("/stylist/changeStylistStatus.do")
 	public void changeStylistStatus(HttpServletRequest request,HttpServletResponse response,
 	@RequestParam(value="userId",required=true)Integer userId,
