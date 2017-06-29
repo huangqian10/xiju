@@ -4,6 +4,7 @@
 package com.xiyoukeji.xiju.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xiyoukeji.xiju.core.dao.BaseHibernateDao;
 import com.xiyoukeji.xiju.core.enums.ReceiptStatus;
+import com.xiyoukeji.xiju.core.enums.StylistReceiptStatus;
 import com.xiyoukeji.xiju.model.PowerInfo;
 import com.xiyoukeji.xiju.model.Receipt;
 import com.xiyoukeji.xiju.model.Stylist;
@@ -38,6 +40,10 @@ public class StylistService {
 	@Autowired
 	@Qualifier("hibernateDao")
 	BaseHibernateDao<Stylist, Integer> dao;
+	
+	@Autowired
+	@Qualifier("hibernateDao")
+	BaseHibernateDao<Receipt, Integer> receiptDao;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -73,6 +79,38 @@ public class StylistService {
 	
 	
 	@Transactional
+	public List<Map<String, Object>> getReceiptListByUserId(Integer userId){
+		List<Map<String, Object>> list=new ArrayList<Map<String,Object>>();
+		Session session = this.sessionFactory.getCurrentSession();
+		String queryString="from Receipt as r where r.PromotionCode.userId="+userId;
+		List<Receipt> receiptList=session.createQuery(queryString).list();
+	
+		int totalMoney=0;
+		for(Receipt r:receiptList){
+			Map<String, Object> map=new HashMap<String, Object>();
+			if(r.getStatus()==ReceiptStatus.NOTPAY.value()||r.getStatus()==ReceiptStatus.PAID.value()){
+				JSONObject jsonObject=JSONObject.parseObject(r.getPayJson());
+				JSONArray jsonArray=jsonObject.getJSONArray("payMsg");
+				totalMoney+=getPrice(jsonArray);
+				map.put("totalMoney", totalMoney);
+				map.put("createTime", r.getCreateTime());
+				map.put("id", r.getId());
+				if(r.getStatus()==ReceiptStatus.NOTPAY.value()){
+					map.put("status", StylistReceiptStatus.RECEIVING.value());
+				}else if(r.getStatus()==ReceiptStatus.PAID.value()){
+					map.put("status", StylistReceiptStatus.COMPLETE.value());
+				}
+				list.add(map);
+			}
+		}
+		return list;
+	}
+	
+	
+	
+
+	
+	@Transactional
 	public Map<String, Object> getStylistInfoByUserId(Integer userId){
 		Map<String, Object> map=new HashMap<String, Object>();
 		Session session = this.sessionFactory.getCurrentSession();
@@ -86,6 +124,7 @@ public class StylistService {
 
 			JSONObject jsonObject=JSONObject.parseObject(r.getPayJson());
 			JSONArray jsonArray=jsonObject.getJSONArray("payMsg");
+			
 			if(r.getStatus()==ReceiptStatus.NOTPAY.value()){
 				withdrawMoney+=	getPrice(jsonArray);
 				totalMoney+=getPrice(jsonArray);
@@ -124,5 +163,8 @@ public class StylistService {
 		}
 	}
 	
+	
+	
+
 
 }

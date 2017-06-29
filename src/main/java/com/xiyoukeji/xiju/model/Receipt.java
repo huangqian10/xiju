@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -77,7 +78,22 @@ public class Receipt {
 	@OneToOne
 	private PromotionCode PromotionCode;
 	
+	@ManyToOne
+	private WithdrawMoney withdrawMoney;
+	
 
+
+	public WithdrawMoney getWithdrawMoney() {
+		return withdrawMoney;
+	}
+
+	public void setWithdrawMoney(WithdrawMoney withdrawMoney) {
+		this.withdrawMoney = withdrawMoney;
+	}
+
+	public PromotionCode getPromotionCode() {
+		return PromotionCode;
+	}
 
 	@Column(name="is_withdraw_money",length=4,nullable=false,columnDefinition="INT default 0")
 	private Integer isWithdrawMoney;

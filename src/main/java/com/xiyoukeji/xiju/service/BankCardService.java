@@ -34,6 +34,16 @@ public class BankCardService {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	/**
+	 * 添加银行卡
+	 * @Title: add 
+	 * @param userId  用户id
+	 * @param owner   开户人
+	 * @param openNumber  开户号码
+	 * @param openBank    开户银行
+	 * @param cellphone   手机号
+	 * @throws
+	 */
 	@Transactional
 	public  void add(Integer userId,String owner,String openNumber,String openBank,String cellphone){
 		BankCard bankCard=new BankCard();
@@ -47,6 +57,16 @@ public class BankCardService {
 	}
 	
 	
+	/**
+	 * 修改银行卡
+	 * @Title: change 
+	 * @param id     银行卡id
+	 * @param owner   开户人
+	 * @param openNumber  开户号码
+	 * @param openBank    开户银行
+	 * @param cellphone   手机号
+	 * @throws
+	 */
 	@Transactional
 	public  void change(Integer id,String owner,String openNumber,String openBank,String cellphone){
 		BankCard bankCard=dao.get(id, BankCard.class);
@@ -59,7 +79,13 @@ public class BankCardService {
 	
 	}
 	
-	
+	/**
+	 * 设置银行卡是否默认
+	 * @Title: setDefault 
+	 * @param id        
+	 * @param isDefault  0为不默认，1为默认  
+	 * @throws
+	 */
 	@Transactional
 	public  void setDefault(Integer id,Integer isDefault){
 		BankCard bankCard= dao.get(id, BankCard.class);
@@ -77,18 +103,38 @@ public class BankCardService {
 	}
 	
 	
-
+	/**
+	 * 根据id获取银行卡信息
+	 * @Title: getById 
+	 * @param id
+	 * @return   
+	 * @throws
+	 */
 	public  BankCard getById(Integer id){
 
 		return  dao.get(id, BankCard.class);
 	
 	}
 	
+	/**
+	 * 根据用户id获取银行卡列表
+	 * @Title: getListByUserId 
+	 * @param userId
+	 * @return   
+	 * @throws
+	 */
 	public List<BankCard> getListByUserId(Integer userId){
 		
 	  return	dao.list(BankCard.class, "userId", userId);
 	}
 	
+	
+	/**
+	 * 删除银行卡
+	 * @Title: deleteById 
+	 * @param id   
+	 * @throws
+	 */
 	@Transactional
 	public void deleteById(Integer id){
 		dao.delete(id, BankCard.class);

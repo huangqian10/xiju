@@ -71,4 +71,26 @@ public class StylistController extends BaseController{
 		Utils.writeBack(request, response, jv);
 	}
 
+	
+	@RequestMapping("/stylist/getReceiptListByUserId.do")
+	public void getReceiptListByUserId(HttpServletRequest request,HttpServletResponse response,
+	@RequestParam(value="userId",required=true)Integer userId){
+		JSONObject jv = new JSONObject();
+	
+		jv.put("info", stylistService.getReceiptListByUserId(userId));
+		Utils.writeBack(request, response, jv);
+	}
+	
+	
+//	@RequestMapping("/stylist/getStylistReceiptById.do")
+//	public void getStylistReceiptById(HttpServletRequest request,HttpServletResponse response,
+//	@RequestParam(value="id",required=true)Integer id){
+//		JSONObject jv = new JSONObject();
+//	
+//		jv.put("info", stylistService.getStylistReceiptById(id));
+//		Utils.writeBack(request, response, jv);
+//	}
+	
+	
+	
 }

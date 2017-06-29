@@ -42,7 +42,16 @@ public class WithdrawMoneyService {
 	@Qualifier("hibernateDao")
 	BaseHibernateDao<BankCard, Integer> bankCardDao;
 	
-	
+	/**
+	 * 提现
+	 * @Title: doWithdrawMoney 
+	 * @param userId 用户id
+	 * @param receiptIdList     订单id列表
+	 * @param bankCardId        银行卡id
+	 * @param totalMoney        提现总金额
+	 * @return   
+	 * @throws
+	 */
 	@Transactional
 	public Integer doWithdrawMoney(Integer userId,String receiptIdList,Integer bankCardId,Integer totalMoney){
 		WithdrawMoney withdrawMoney=new WithdrawMoney();
@@ -64,6 +73,15 @@ public class WithdrawMoneyService {
 		return Const.SUCCESS;
 	}
 	
+	
+	/**
+	 * 更改订单状态
+	 * @Title: changeWithdrawMoneyStatusById 
+	 * @param id          
+	 * @param status
+	 * @return   
+	 * @throws
+	 */
 	@Transactional
 	public Integer  changeWithdrawMoneyStatusById(Integer id,Integer status){
 		
@@ -73,12 +91,26 @@ public class WithdrawMoneyService {
 		return Const.SUCCESS;
 	}
 	
-	
+	/**
+	 * 根据id获取提现信息
+	 * @Title: getWithdrawMoneyById 
+	 * @param id
+	 * @return   
+	 * @throws
+	 */
 	public WithdrawMoney getWithdrawMoneyById(Integer id){
 		WithdrawMoney withdrawMoney	=withdrawDao.get(id, WithdrawMoney.class);
 		return withdrawMoney;
 	}
 	
+	
+	/**
+	 * 根据用户id获取提现列表
+	 * @Title: getWithdrawMoneyById 
+	 * @param id
+	 * @return   
+	 * @throws
+	 */
 	public List<WithdrawMoney> getWithdrawMoneyByUserId(Integer userId){
 		DetachedCriteria dc = DetachedCriteria.forClass(WithdrawMoney.class);
 		dc.add(Restrictions.eq("userId", userId));
